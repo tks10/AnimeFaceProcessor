@@ -3,7 +3,7 @@ import sys
 import os.path
 
 
-def detect_original(filename, cascade_file="./lbpcascade_animeface.xml"):
+def detect_original(filename, cascade_file="../lbpcascade_animeface.xml"):
     if not os.path.isfile(cascade_file):
         raise RuntimeError("%s: not found" % cascade_file)
 
@@ -25,7 +25,7 @@ def detect_original(filename, cascade_file="./lbpcascade_animeface.xml"):
     cv2.imwrite("out.png", image)
 
 
-def detect(filename, cascade_file="./lbpcascade_animeface.xml"):
+def detect(filename, cascade_file="../lbpcascade_animeface.xml"):
     if not os.path.isfile(cascade_file):
         raise RuntimeError("%s: not found" % cascade_file)
 

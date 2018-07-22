@@ -29,24 +29,43 @@ def video_2_frames(video_file='./IMG_2140.MOV', image_dir='./image_dir/', image_
     cap.release()  # When everything done, release the capture
 
 
-def extract_faces(image_dir):
-    faces = detect.detect(image_dir)
+def extract_faces(image_dir, cascade=None):
+    if cascade is None:
+        faces = detect.detect(image_dir)
+    else:
+        faces = detect.detect(image_dir, cascade_file=cascade)
+
     image = Image.open(image_dir)
     idx = 0
     for face in faces:
         x, y, w, h = face
         face = (x, y, x+w, y+h)
         cropped = image.crop(face)
-        image_dir_ = "./faces/" + str(idx) + image_dir.split("/")[-1]
+        image_dir_ = "../faces/" + str(idx) + image_dir.split("/")[-1]
         cropped.save(image_dir_, "PNG", quality=100, optimize=100)
         idx += 1
         print("Saved", image_dir_)
 
 
-if __name__ == "__main__":
-    dirs = glob.glob("./images/*")
+def extract_all_faces(src):
+    dirs = glob.glob(src)
     for d in dirs:
         try:
             extract_faces(d)
         except Exception as e:
             print(e)
+
+
+def extract_smiles(src):
+    dirs = glob.glob(src)
+    cascade = "../haarcascade_smile.xml"
+    for d in dirs:
+        try:
+            extract_faces(d, cascade)
+        except Exception as e:
+            print(e)
+
+
+if __name__ == "__main__":
+    # extract_smiles(src="../ClassifyTest_Cropped/*")
+    extract_all_faces(src="../ClassifyTest/*")
