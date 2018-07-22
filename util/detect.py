@@ -16,7 +16,7 @@ def detect_original(filename, cascade_file="../lbpcascade_animeface.xml"):
                                      # detector options
                                      scaleFactor=1.1,
                                      minNeighbors=5,
-                                     minSize=(150, 150))
+                                     minSize=(75, 75))
     for (x, y, w, h) in faces:
         cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
@@ -38,7 +38,7 @@ def detect(filename, cascade_file="../lbpcascade_animeface.xml"):
                                      # detector options
                                      scaleFactor=1.1,
                                      minNeighbors=5,
-                                     minSize=(150, 150))
+                                     minSize=(75, 75))
 
     return faces  # (x, y, w, h)
 

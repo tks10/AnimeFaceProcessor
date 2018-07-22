@@ -4,9 +4,10 @@ import cv2
 from util import detect
 from PIL import Image
 import glob
+from scipy import ndimage
 
 
-def video_2_frames(video_file='./IMG_2140.MOV', image_dir='./image_dir/', image_file='img_%s.png'):
+def video_2_frames(video_file='./IMG_2140.MOV', image_dir='./image_dir/', image_file='img_%s.png', sampling=5):
     # Delete the entire directory tree if it exists.
     if os.path.exists(image_dir):
         shutil.rmtree(image_dir)
@@ -20,11 +21,17 @@ def video_2_frames(video_file='./IMG_2140.MOV', image_dir='./image_dir/', image_
     cap = cv2.VideoCapture(video_file)
     while(cap.isOpened()):
         flag, frame = cap.read()  # Capture frame-by-frame
+        for j in range(sampling-1):
+            flag, frame = cap.read()
         if flag == False:  # Is a frame left?
             break
+
+        frame = cv2.resize(frame, (frame.shape[1]//2, frame.shape[0]//2))  # Resize to half
+        frame = ndimage.rotate(frame, 90, reshape=True)
+
         cv2.imwrite(image_dir+image_file % str(i).zfill(6), frame)  # Save a frame
         print('Save', image_dir+image_file % str(i).zfill(6))
-        i += 1
+        i += sampling
 
     cap.release()  # When everything done, release the capture
 
@@ -68,4 +75,5 @@ def extract_smiles(src):
 
 if __name__ == "__main__":
     # extract_smiles(src="../ClassifyTest_Cropped/*")
-    extract_all_faces(src="../ClassifyTest/*")
+     extract_all_faces(src="../images/*")
+    # video_2_frames(video_file="../video.MOV", image_dir="../images/", image_file="img_%s.png")
