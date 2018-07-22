@@ -1,7 +1,7 @@
 import os
 import shutil
 import cv2
-import detect
+from util import detect
 from PIL import Image
 import glob
 
